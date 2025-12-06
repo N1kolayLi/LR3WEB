@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Результат обработки</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты обработки</h1>
+
+        <fieldset>
+            <legend>Сравнение изображений</legend>
+            <table>
+                <tr>
+                    <th>Оригинал</th>
+                    <th>Обработанное</th>
+                </tr>
+                <tr>
+                    <td><img src="{{ url_for('static', filename='uploads/original.jpg') }}" alt="Оригинал"></td>
+                    <td><img src="{{ url_for('static', filename='uploads/processed.jpg') }}" alt="Обработанное"></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <fieldset>
+            <legend>Гистограммы распределения цветов</legend>
+            <table>
+                <tr>
+                    <td><img src="{{ url_for('static', filename='uploads/red_channel.png') }}" alt="Красный канал"></td>
+                    <td><img src="{{ url_for('static', filename='uploads/green_channel.png') }}" alt="Зелёный канал"></td>
+                    <td><img src="{{ url_for('static', filename='uploads/blue_channel.png') }}" alt="Синий канал"></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <a href="{{ url_for('var9') }}" class="btn">Вернуться на главную</a>
+    </div>
+</body>
+</html>
