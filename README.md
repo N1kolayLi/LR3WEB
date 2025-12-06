@@ -59,6 +59,8 @@ pip install -r requirements.txt
 
 ## Running the Application
 
+### Development Mode (Flask development server)
+
 With virtual environment activated:
 
 ```bash
@@ -67,13 +69,67 @@ python LR3_WEB.py
 
 Application will be available at `http://localhost:5000`
 
+### Production Mode (Gunicorn WSGI server)
+
+Gunicorn is recommended for production deployments.
+
+#### Windows:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\venv\Scripts\Activate.ps1
+.\run.bat
+```
+
+Or manually:
+
+```powershell
+gunicorn --bind 0.0.0.0:8000 --workers 4 --config gunicorn_config.py LR3_WEB:app
+```
+
+#### macOS/Linux/WSL:
+
+```bash
+source venv/bin/activate
+chmod +x run.sh
+./run.sh
+```
+
+Or manually:
+
+```bash
+gunicorn --bind 0.0.0.0:8000 --workers 4 --config gunicorn_config.py LR3_WEB:app
+```
+
+**Custom configuration:**
+
+Create `.env` file from `.env.example` and customize:
+
+```bash
+cp .env.example .env
+# Edit .env with your settings
+```
+
+Available environment variables:
+- `GUNICORN_BIND` - Server address and port (default: `0.0.0.0:8000`)
+- `GUNICORN_WORKERS` - Number of worker processes (default: CPU count × 2 + 1)
+- `GUNICORN_WORKER_CLASS` - Worker type: `sync`, `async`, `gevent` (default: `sync`)
+- `GUNICORN_TIMEOUT` - Worker timeout in seconds (default: `30`)
+- `GUNICORN_LOG_LEVEL` - Log level: `debug`, `info`, `warning`, `error`, `critical` (default: `info`)
+
+Production application will be available at `http://localhost:8000` (or configured port)
+
 ## Project Structure
 
 ```
 LR3WEB/
 ├── LR3_WEB.py              # Main Flask application
 ├── test_app.py             # Unit tests
+├── gunicorn_config.py      # Gunicorn configuration
+├── run.sh                  # Startup script for Linux/macOS/WSL
+├── run.bat                 # Startup script for Windows
 ├── requirements.txt        # Python dependencies
+├── .env.example            # Environment variables template
 ├── README.md               # This file
 ├── .gitignore              # Git ignore rules
 ├── .github/

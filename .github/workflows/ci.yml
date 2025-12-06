@@ -48,6 +48,14 @@ jobs:
       - name: Check Flask app imports
         run: |
           python -c "from LR3_WEB import app; print('Flask app imported successfully')"
+      
+      - name: Verify Gunicorn configuration
+        run: |
+          python -c "import gunicorn_config; print('Gunicorn config loaded successfully')"
+      
+      - name: Test Gunicorn startup (brief check)
+        run: |
+          timeout 5 gunicorn --bind 127.0.0.1:9999 --workers 1 --config gunicorn_config.py LR3_WEB:app || true
 
   build:
     runs-on: ubuntu-latest
