@@ -4,19 +4,10 @@
     <meta charset="UTF-8">
     <title>Загрузка изображения</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    {% if site_key %}
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    {% endif %}
-    <style>
-        .error { color: red; margin: 0.5rem 0; }
-    </style>
 </head>
 <body>
     <div class="container">
         <h1>Загрузка изображения</h1>
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
         <fieldset>
             <legend>Форма загрузки</legend>
             <form action="{{ url_for('process') }}" method="post" enctype="multipart/form-data">
@@ -31,10 +22,6 @@
 
                 <label for="b_coef">Коэффициент синего (B):</label>
                 <input type="number" step="0.1" name="b_coef" id="b_coef" value="1.0">
-
-                {% if site_key %}
-                <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
-                {% endif %}
 
                 <button type="submit">Отправить</button>
             </form>
