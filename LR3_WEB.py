@@ -8,6 +8,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+@app.route('/')
 @app.route('/var9')
 def var9():
     return render_template('var9.html')
