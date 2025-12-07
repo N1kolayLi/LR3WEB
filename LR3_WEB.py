@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+import requests
 from PIL import Image
+import matplotlib
+# Use Agg backend on headless hosts
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -8,14 +12,38 @@ app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# reCAPTCHA keys (set these as environment variables on Render)
+RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY')
+RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY')
+
+
 @app.route('/')
 @app.route('/var9')
 def var9():
-    return render_template('var9.html')
+    return render_template('var9.html', site_key=RECAPTCHA_SITE_KEY)
 
 @app.route('/process', methods=['POST'])
 def process():
-    file = request.files['file']
+    # If reCAPTCHA secret is provided, validate the captcha first
+    if RECAPTCHA_SECRET_KEY:
+        recaptcha_response = request.form.get('g-recaptcha-response')
+        if not recaptcha_response:
+            return render_template('var9.html', site_key=RECAPTCHA_SITE_KEY, error='Пожалуйста, подтвердите, что вы не робот.')
+
+        payload = {
+            'secret': RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        try:
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=payload, timeout=5)
+            result = r.json()
+        except Exception:
+            return render_template('var9.html', site_key=RECAPTCHA_SITE_KEY, error='Ошибка при проверке капчи. Попробуйте позже.')
+
+        if not result.get('success'):
+            return render_template('var9.html', site_key=RECAPTCHA_SITE_KEY, error='Ошибка капчи. Попробуйте ещё раз.')
+
+    file = request.files.get('file')
     if not file:
         return redirect(url_for('var9'))
 
