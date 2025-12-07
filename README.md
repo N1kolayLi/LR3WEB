@@ -184,6 +184,73 @@ GitHub Actions automatically runs on push/PR:
 
 See `.github/workflows/ci.yml` for details.
 
+## Deployment
+
+### Render.com (Recommended for cloud hosting)
+
+1. **Prerequisites:**
+   - GitHub account with this repository
+   - Render.com account (free tier available)
+
+2. **Connect to Render:**
+   - Go to [Render.com](https://render.com)
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Select `LR3WEB` repository
+
+3. **Configure deployment:**
+   - **Name:** `lr3web` (or your preferred name)
+   - **Environment:** `Python 3`
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** Leave empty (Render will use `Procfile`)
+   - **Instance Type:** Free (or Starter+)
+
+4. **Environment Variables (optional):**
+   - `GUNICORN_WORKERS`: Number of workers (default auto-calculated)
+   - `GUNICORN_LOG_LEVEL`: `info` or `debug`
+
+5. **Deploy:**
+   - Click "Create Web Service"
+   - Render will automatically deploy on every push to `main`
+   - Your app will be available at `https://<your-service-name>.onrender.com`
+
+**Note:** Files generated in `static/uploads/` are temporary on Render's free tier (ephemeral storage). For persistent storage, use Render's PostgreSQL or external storage solutions.
+
+### Heroku (Alternative)
+
+If using Heroku instead of Render, the `Procfile` and `runtime.txt` are compatible:
+
+```bash
+heroku create <app-name>
+git push heroku main
+```
+
+### Traditional Server / VPS
+
+For self-hosted deployment:
+
+```bash
+# 1. SSH into your server
+ssh user@your-server.com
+
+# 2. Clone repository
+git clone https://github.com/N1kolayLi/LR3WEB.git
+cd LR3WEB
+
+# 3. Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# 4. Install dependencies
+pip install -r requirements.txt
+
+# 5. Run with Gunicorn
+gunicorn --bind 0.0.0.0:8000 --workers 4 --config gunicorn_config.py LR3_WEB:app
+
+# Or use systemd service for auto-restart
+# Create /etc/systemd/system/lr3web.service
+```
+
 ## API Routes
 
 ### GET `/var9`
