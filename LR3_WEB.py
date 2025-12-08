@@ -66,6 +66,9 @@ def process():
     new_img = Image.fromarray(new_arr)
     processed_path = os.path.join(UPLOAD_FOLDER, 'processed.jpg')
     new_img.save(processed_path)
+    Image.fromarray(r.astype(np.uint8)).save(os.path.join(UPLOAD_FOLDER, 'red_map.jpg'))
+    Image.fromarray(g.astype(np.uint8)).save(os.path.join(UPLOAD_FOLDER, 'green_map.jpg'))
+    Image.fromarray(b.astype(np.uint8)).save(os.path.join(UPLOAD_FOLDER, 'blue_map.jpg'))
 
     def plot_histogram(channel, color, name):
         plt.figure()

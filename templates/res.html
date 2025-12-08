@@ -33,6 +33,16 @@
                 </tr>
             </table>
         </fieldset>
+        <fieldset>
+    <legend>Цветовые карты каналов</legend>
+    <table>
+        <tr>
+            <td><img src="{{ url_for('static', filename='uploads/red_map.jpg') }}" alt="Красная карта"></td>
+            <td><img src="{{ url_for('static', filename='uploads/green_map.jpg') }}" alt="Зелёная карта"></td>
+            <td><img src="{{ url_for('static', filename='uploads/blue_map.jpg') }}" alt="Синяя карта"></td>
+        </tr>
+    </table>
+</fieldset>
 
         <a href="{{ url_for('var9') }}" class="btn">Вернуться на главную</a>
     </div>
